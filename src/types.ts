@@ -18,9 +18,23 @@ export interface user {
 }
 
 export interface movie {
-    "movieId": "string",
-    "title": "string",
-    "releaseDate": "string",
-    //"description": "string",
-    "imageUrl": "string"
+    movieId: string,
+    title: string,
+    subtitle: string[],
+    plot: string,
+    genre: string[],
+    releaseYear: string,
+    duration: string,
+    director: string[],
+    cast: string [],
+    images: string[],
+    trailer: string,
+    totalRating: number,
+    ratingsCount: number,
+    ratings: [
+        {
+            userId: string, 
+            rating: number
+        }
+    ]
 }

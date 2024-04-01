@@ -7,19 +7,15 @@ exports.latestMovies = async function (page: number, limit: number) {
     console.log('page',page)
     console.log('limit',limit)
     try{
-        /*const movies = await movie.find()
+        const movies: Array<movie> | null = await MovieModel.find()
+            .select('_id title releaseYear overallRating ratingsCount genre')
             .sort({releaseYear: -1})
             .skip((page - 1) * limit)
             .limit(limit)
-        return movies*/
-        console.log("\nhola buscando pelicula\n")
-        const moviee: movie | null = await MovieModel.findOne().select();
-        console.log('MOVIE: ',moviee)
-        return moviee;
+        return movies
     }
     catch (e){
         console.log("\nERROR ")
-        throw new Error ();
-        
+        throw new Error ();        
     }
 }

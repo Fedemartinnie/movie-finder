@@ -11,26 +11,15 @@ const moviesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    releaseYear: Number,
-    images: [String]
-    /*movieId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    title: {
-        type: String,
-        required: true
-    },
     subtitle: [String],
     plot: String,
-    genre: String,
-    releaseDate: Number,
+    genre: [String],
+    releaseYear: Number, //debe ser año o fecha completa?
     duration: String,
     director: String,
     cast: [String] || null,
     images: [String],
-    trailer: String,
+    trailer: String, //debe ser un Array => varios trailers
     overallRating: Number,
     ratingsCount: Number,
     ratings: [
@@ -38,7 +27,7 @@ const moviesSchema = new mongoose.Schema({
             userId: String,
             rating: Number
         }
-    ]*/
+    ]
 })
 
 
