@@ -3,7 +3,7 @@ import { movie } from '../types'
 const MovieModel = require('../models/movies.model')
 
 
-exports.latestMovies = async function (page: number, limit: number) {
+exports.latestMovies = async (page: number, limit: number) => {
     console.log('page',page)
     console.log('limit',limit)
     try{
@@ -15,7 +15,25 @@ exports.latestMovies = async function (page: number, limit: number) {
         return movies
     }
     catch (e){
-        console.log("\nERROR ")
-        throw new Error ();        
+        throw new Error ()    
+    }
+}
+
+exports.search = async (name: string) => {
+    try { 
+        const movies: Array<movie> = await MovieModel.find({
+            $or:[
+                {title: new RegExp(name, 'i')}, 
+                {cast: {$regex: new RegExp(name, 'i')}
+            }]
+        }).select('title')
+
+        if(movies.length === 0){
+            //lógica para flexibilizar la busqueda si no hay resultados
+        }
+        return movies        
+    }
+    catch{
+        throw new Error()
     }
 }

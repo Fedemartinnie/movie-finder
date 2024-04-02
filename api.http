@@ -1,3 +1,11 @@
-
-GET http://localhost:8000/movies/latest?localhost:8000/movies/latest?&page=4
+### inicio app 
+GET http://localhost:8000/movies/latest?&page=3
 Content-Type: application/json
+
+
+### movies search
+//  si la pelicula incluye el string la encuentra (si falta una letra en el medio no)
+GET http://localhost:8000/movies/search?&name=dark+kni
+Content-Type: application/json
+
+

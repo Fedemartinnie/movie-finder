@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
 var mongoosePaginate = require('mongoose-paginate')
+const z = require('zod') // agregarlo al movieSchema
 
 const moviesSchema = new mongoose.Schema({
     movieId: {

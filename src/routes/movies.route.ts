@@ -9,5 +9,6 @@ router.get('/', (_req, res) => {
 })
 
 router.get('/latest', moviesController.latestMovies)
+router.get('/search', moviesController.search) //change search for 'name'
 
 module.exports = router
