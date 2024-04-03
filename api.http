@@ -8,4 +8,18 @@ Content-Type: application/json
 GET http://localhost:8000/movies/search?&name=dark+kni
 Content-Type: application/json
 
+### movies Search by genre
+GET http://localhost:8000/movies/search/genre?genre=sci-fi
+//GET http://localhost:8000/movies/search/genre?genre=action
+Content-Type: application/json
+
+### movies rate 
+//agregar el dato por body userId
+PUT http://localhost:8000/movies/rating/660c8a9aefbf168167216717
+Content-Type: application/json
+
+{
+    "userId": "5",
+    "rate": 5
+}
 

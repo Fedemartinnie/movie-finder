@@ -18,23 +18,27 @@ export interface user {
 }
 
 export interface movie {
+    _id: any,
     movieId: string,
     title: string,
     subtitle: string[],
     plot: string,
-    genre: string[],
+    genre: genre,//string[],
     releaseYear: string,
     duration: string,
     director: string[],
     cast: string [],
     images: string[],
     trailer: string,
-    totalRating: number,
+    overallRating: number,
     ratingsCount: number,
     ratings: [
         {
             userId: string, 
-            rating: number
+            rate: number
         }
     ]
 }
+
+
+export type MovieSummary = Pick<movie, '_id' | 'title' | 'overallRating' | 'images' | 'genre' | 'releaseYear'>;
