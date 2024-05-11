@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction } from "express"
 import { MovieSummary, movie } from "../types"
-var moviesService = require('../services/movies.services')
+const moviesService = require('../services/movies.services')
 
 // const _this = this
 
@@ -73,7 +73,7 @@ exports.rate = async (req: Request, res: Response) => {
 exports.getMovie = async (req: Request, res: Response) => {
     const movieId = req.query.id
     try{
-        const movie: movie = await moviesService.getMovie(movieId)
+        const movie: MovieSummary = await moviesService.getMovie(movieId)
         if(movie){
             return movie
         }

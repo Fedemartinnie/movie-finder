@@ -2,12 +2,10 @@
 import { movie, MovieSummary } from '../types'
 const MovieModel = require('../models/movies.model')
 
-exports.latestMovies = async (page: number, limit: number) => {
-    console.log('page',page)
-    console.log('limit',limit)
+exports.latestMovies = async (page: number, limit: number) => {    
     try{
         const movies: Array<movie> | null = await MovieModel.find()
-            .select('_id title releaseYear overallRating ratingsCount genre images trailer')
+            .select('_id title releaseYear overallRating genre images')
             .sort({releaseYear: -1})
             .skip((page - 1) * limit)
             .limit(limit)
@@ -26,7 +24,7 @@ exports.search = async (name: string) => {
                 {title: new RegExp(name, 'i')}, 
                 {cast: {$regex: new RegExp(name, 'i')}
             }]
-        }).select('_id title releaseYear overallRating ratingsCount genre')
+        }).select('_id title releaseYear overallRating genre images')
 
         if(movies.length === 0){
             //lógica para flexibilizar la busqueda si no hay resultados
@@ -43,7 +41,7 @@ exports.filterByGenre = async (genre: string) => {
     try{
         const movies: Array<MovieSummary> = await MovieModel.find({
                 genre: new RegExp(genre, 'i')
-            }).select('_id title overallRating images genre')
+            }).select('_id title releaseYear overallRating images genre')
         return movies
     }
     catch {
