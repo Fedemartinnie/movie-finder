@@ -10,6 +10,5 @@ router.get("/", (_req, res) => {
     res.send("Users Route !!!")    
 })
 
-router.post('/googleSignIn',usersController.register)
 
 module.exports = router
