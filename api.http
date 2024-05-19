@@ -5,12 +5,15 @@ Content-Type: application/json
 
 ### movies search
 //  si la pelicula incluye el string la encuentra (si falta una letra en el medio no)
-GET http://localhost:8000/movies/search?&name=dark+kni
+GET http://localhost:8000/movies/search?&name=dark
 Content-Type: application/json
 
 ### movies Search by genre
 GET http://localhost:8000/movies/search/genre?genre=sci-fi
-//GET http://localhost:8000/movies/search/genre?genre=action
+Content-Type: application/json
+
+###
+GET http://localhost:8000/movies/search/genre?genre=action
 Content-Type: application/json
 
 ### movies rate 

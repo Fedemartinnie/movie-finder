@@ -23,7 +23,7 @@ export interface movie {
     title: string,
     subtitle: string[],
     plot: string,
-    genre: genre,// agregar --> genre[] //string[],
+    genre: genre[],//string[],
     releaseYear: string,
     duration: string,
     director: string[],
