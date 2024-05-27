@@ -1,5 +1,5 @@
 //import { string } from 'zod'
-import { movie, MovieSummary } from '../types'
+import { movie } from '../types'
 const MovieModel = require('../models/movies.model')
 
 //agregar keys de la nueva BD (trailers , portrait, landscape, etc)
@@ -15,9 +15,7 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
         console.log("rating ", sortByRating)
     }
     
-
     console.log('sortParam --> ',sortParam)
-
 
     const query: any = {};
 
@@ -38,8 +36,23 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
 
 
     try {
+        // const projection = {
+        //     cast: { $slice: 15 },
+        //     'images.backdrops': { $slice: 10 },
+        //     'images.logos': { $slice: 10 },
+        //     'images.posters': { $slice: 10 }
+        // }
         const movies: Array<movie> | null = await MovieModel.find(query)
-            .select('_id title releaseYear genres overallRating images cast director')
+            .select({
+            '_id': 1,
+            'title': 1,
+            'releaseYear': 1,
+            'genres': 1,
+            'overallRating': 1,
+            'images.backdrops': { $slice: 2 },            
+            'images.posters': { $slice: 2 },
+            // 'cast': { $slice: 12 }
+        })
             .sort(sortParam)
             .skip((page - 1) * limit)
             .limit(limit);
@@ -52,54 +65,7 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
 
 }
 
-exports.latestMovies = async (page: number, limit: number) => {    
-    try{
-        const movies: Array<movie> | null = await MovieModel.find()
-            .select('_id title releaseYear overallRating genre images')
-            .sort({releaseYear: -1})
-            .skip((page - 1) * limit)
-            .limit(limit)
-        return movies
-    }
-    catch (e){
-        throw new Error ()    
-    }
-}
-
-
-exports.search = async (name: string) => {
-    try { 
-        const movies: Array<MovieSummary> = await MovieModel.find({
-            $or:[
-                {title: new RegExp(name, 'i')}, 
-                {cast: {$regex: new RegExp(name, 'i')}
-            }]
-        }).select('_id title releaseYear overallRating genre images')
-
-        if(movies.length === 0){
-            //lógica para flexibilizar la busqueda si no hay resultados
-        }
-        return movies        
-    }
-    catch{
-        throw new Error()
-    }
-}
-
-
-exports.filterByGenre = async (genre: string) => {
-    try{
-        const movies: Array<MovieSummary> = await MovieModel.find({
-                genre: new RegExp(genre, 'i')
-            }).select('_id title releaseYear overallRating images genre')
-        return movies
-    }
-    catch {
-        throw new Error()
-    }
-}
-
-
+// Rate Movie
 exports.rate = async (rate: number, movieId: string, userId: string) => {    
     try{        
         const movie = await MovieModel.findById(movieId).select('overallRating ratingsCount ratings')
@@ -125,10 +91,23 @@ exports.rate = async (rate: number, movieId: string, userId: string) => {
     }
 }
 
-
+// Movie View: All Data
 exports.getMovie = async (movieId: number) => {
     try{
         const movie = await MovieModel.findById(movieId)
+            .select({
+                _id: 1,
+                title: 1,
+                releaseYear: 1,
+                duration: 1,
+                genres: 1,
+                trailer: 1,
+                plot: 1,
+                'overallRating': 1,            
+                'images.backdrops': { $slice: 10 },
+                cast: { $slice: 12 },
+                director: { $slice: 3 },
+            })
         return movie
     }
     catch{

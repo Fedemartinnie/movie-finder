@@ -6,13 +6,14 @@ const moviesService = require('../services/movies.services')
 
 
 exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) => {
-    const page = req.query.page ? req.query.page : 1
+    // const page = req.query.page ? req.query.page : 1
+    const page = req.query.page ?? 1
     const limit = req.query.limit
     const name = req.query.name ?? null
     const sortByRating = ( req.query.sortByRating) ?? null
     const sortByDate = (req.query.sortByDate) ?? null
     const genre = req.query.genre ?? null
-    console.log('genre controller---> ', genre)
+    console.log('genre controller---> ', page)
     console.log('query controller---> ', req.query)
 
     try {
@@ -23,55 +24,6 @@ exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) 
         }
         return res.status(404).json({message: 'No data available'})        
     } catch {
-        return res.status(500).json({message: 'Server Error'})
-    }
-}
-
-//  Home Movies
-exports.latestMovies = async (req: Request, res: Response, _next: NextFunction) => {
-    const page = req.query.page ? req.query.page : 1
-    const limit = 20
-
-    try {
-        const movies : Array<movie> = await moviesService.latestMovies(page, limit)
-        console.log(movies)
-        if(movies.length > 0){
-            return res.status(200).json({data: movies, message: "Succesfully movies Recieved"})
-        }
-        return res.status(404).json({message: "No data available"})
-    } catch (e: any) {
-        return res.status(500).json({message: "Server Error" });
-    }
-    
-}
-
-// title || actor
-exports.search = async (req: Request, res: Response) => {
-    const name = req.query.name
-    try {
-        const movies: Array<movie> = await moviesService.search(name)
-        console.log('req name ', name)
-        if(movies.length > 0) {
-            return res.status(200).json({data: movies, message: "movies found"})
-        }
-        return res.status(404).json({message: "No results found for the search term."})
-    }
-    catch {
-        return res.status(500).json({message: "Server Error"})
-    }
-}
-
-exports.filterByGenre = async (req: Request, res: Response) => {
-    const genre = req.query.genre
-    console.log('genero: ',genre)
-    try{
-        const movies: Array<movie> = await moviesService.filterByGenre(genre)
-        if(movies.length > 0){
-            return res.status(200).json({data: movies, message: "movies found by genre"})
-        }
-        return res.status(404).json({message: 'No results found for the specified genre'})
-    }
-    catch{
         return res.status(500).json({message: 'Server Error'})
     }
 }
@@ -95,9 +47,11 @@ exports.rate = async (req: Request, res: Response) => {
 
 
 exports.getMovie = async (req: Request, res: Response) => {
-    const movieId = req.query.id
+    const movieId = req.params.id
+
     try{
-        const movie: MovieSummary = await moviesService.getMovie(movieId)
+        const movie: movie = await moviesService.getMovie(movieId)
+        console.log("moviee ----> ",movie)
         if(movie){
             return movie
         }

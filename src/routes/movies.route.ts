@@ -10,10 +10,7 @@ router.get('/', (_req, res) => {
 
 
 //falta agregar el Authorization --> cuando tengamos el googleSignIn
-router.get('/search', moviesController.moviesResult)
-router.get('/latest', moviesController.latestMovies)
-router.get('/results', moviesController.search) 
-router.get('/genre', moviesController.filterByGenre)
+router.get('/results', moviesController.moviesResult)
 router.get('/:id', moviesController.getMovie)
 router.put('/rating/:id', moviesController.rate)
 

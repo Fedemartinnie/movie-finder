@@ -1,19 +1,19 @@
 ### inicio app 
 
 ###  Home Search
-GET http://localhost:8000/movies/search?&page=1&limit=10&sortByDate=-1
+GET http://localhost:8000/movies/results?&page=2&limit=10&sortByDate=-1
 Content-Type: application/json
 
 ### Search by Title + sort by rating 
-GET http://localhost:8000/movies/search?&name=godzilla&page=1&limit=10&sortByRating=1
+GET http://localhost:8000/movies/results?&name=godzilla&limit=10&sortByRating=1
 Content-Type: application/json
 
 ### Search by Actor
-GET http://localhost:8000/movies/search?&name=ryan%20reynolds&page=1&limit=10&sortByDate=-1
+GET http://localhost:8000/movies/results?&name=ryan%20reynolds&page=1&limit=10&sortByDate=-1
 Content-Type: application/json
 
 ### Search by Genre
-GET http://localhost:8000/movies/search?&genre=adventure&page=1&limit=10&sortByRating=1
+GET http://localhost:8000/movies/results?&genre=adventure&page=1&limit=10&sortByRating=1
 Content-Type: application/json
 
 ### movies rate 
@@ -25,4 +25,9 @@ Content-Type: application/json
     "userId": "5",
     "rate": 5
 }
+
+
+### Get Movie View
+GET http://localhost:8000/movies/664fd726324518b4b4556d4f
+Content-Type: application/json
 
