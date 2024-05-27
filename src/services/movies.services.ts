@@ -2,6 +2,56 @@
 import { movie, MovieSummary } from '../types'
 const MovieModel = require('../models/movies.model')
 
+//agregar keys de la nueva BD (trailers , portrait, landscape, etc)
+exports.moviesResult = async (page: number, limit: number, name: string | null, sortByDate: number | null, sortByRating: number | null, genre: string | null) => {
+    let sortParam: any = {};
+    
+    if(sortByDate){
+        sortParam.releaseYear = Number(sortByDate)
+        console.log("date ",sortByDate)
+    }
+    if (sortByRating) {
+        sortParam.overallRating = Number(sortByRating)
+        console.log("rating ", sortByRating)
+    }
+    
+
+    console.log('sortParam --> ',sortParam)
+
+
+    const query: any = {};
+
+    if (name) {
+        query.$or = [
+            { title: { $regex: new RegExp(name, 'i') } },
+            { 'cast.name': { $regex: new RegExp(name, 'i') } }
+        ];
+    }
+    console.log('genre ',genre)
+    console.log(genre!==null)
+    if (genre){
+        query.genres = { $regex: new RegExp(genre, 'i') }
+    }
+
+    console.log('query ----> ',query)
+    console.log('query.genres ----> ',query.genres)
+
+
+    try {
+        const movies: Array<movie> | null = await MovieModel.find(query)
+            .select('_id title releaseYear genres overallRating images cast director')
+            .sort(sortParam)
+            .skip((page - 1) * limit)
+            .limit(limit);
+        return movies;
+
+    }
+    catch {
+        throw new Error()
+    }
+
+}
+
 exports.latestMovies = async (page: number, limit: number) => {    
     try{
         const movies: Array<movie> | null = await MovieModel.find()

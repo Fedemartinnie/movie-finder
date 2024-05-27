@@ -1,20 +1,19 @@
 ### inicio app 
 
-GET http://localhost:8000/movies/latest?&page=3
+###  Home Search
+GET http://localhost:8000/movies/search?&page=1&limit=10&sortByDate=-1
 Content-Type: application/json
 
-
-### movies search
-//  si la pelicula incluye el string la encuentra (si falta una letra en el medio no)
-GET http://localhost:8000/movies/search?&name=dark
+### Search by Title + sort by rating 
+GET http://localhost:8000/movies/search?&name=godzilla&page=1&limit=10&sortByRating=1
 Content-Type: application/json
 
-### movies Search by genre
-GET http://localhost:8000/movies/search/genre?genre=sci-fi
+### Search by Actor
+GET http://localhost:8000/movies/search?&name=ryan%20reynolds&page=1&limit=10&sortByDate=-1
 Content-Type: application/json
 
-###
-GET http://localhost:8000/movies/search/genre?genre=action
+### Search by Genre
+GET http://localhost:8000/movies/search?&genre=adventure&page=1&limit=10&sortByRating=1
 Content-Type: application/json
 
 ### movies rate 

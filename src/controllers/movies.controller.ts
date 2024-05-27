@@ -4,10 +4,33 @@ const moviesService = require('../services/movies.services')
 
 // const _this = this
 
+
+exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) => {
+    const page = req.query.page ? req.query.page : 1
+    const limit = req.query.limit
+    const name = req.query.name ?? null
+    const sortByRating = ( req.query.sortByRating) ?? null
+    const sortByDate = (req.query.sortByDate) ?? null
+    const genre = req.query.genre ?? null
+    console.log('genre controller---> ', genre)
+    console.log('query controller---> ', req.query)
+
+    try {
+        const movies: Array<MovieSummary> = await moviesService.moviesResult(page, limit, name, sortByDate, sortByRating, genre)
+        console.log('movies --> ', movies)
+        if(movies.length > 0){
+            return res.status(200).json({data: movies, message: 'Succesfully movies recieved'})
+        }
+        return res.status(404).json({message: 'No data available'})        
+    } catch {
+        return res.status(500).json({message: 'Server Error'})
+    }
+}
+
 //  Home Movies
 exports.latestMovies = async (req: Request, res: Response, _next: NextFunction) => {
     const page = req.query.page ? req.query.page : 1
-    const limit = 10
+    const limit = 20
 
     try {
         const movies : Array<movie> = await moviesService.latestMovies(page, limit)
@@ -25,9 +48,9 @@ exports.latestMovies = async (req: Request, res: Response, _next: NextFunction) 
 // title || actor
 exports.search = async (req: Request, res: Response) => {
     const name = req.query.name
-    console.log("------------------------\NNAME: ",name)
     try {
         const movies: Array<movie> = await moviesService.search(name)
+        console.log('req name ', name)
         if(movies.length > 0) {
             return res.status(200).json({data: movies, message: "movies found"})
         }
@@ -40,6 +63,7 @@ exports.search = async (req: Request, res: Response) => {
 
 exports.filterByGenre = async (req: Request, res: Response) => {
     const genre = req.query.genre
+    console.log('genero: ',genre)
     try{
         const movies: Array<movie> = await moviesService.filterByGenre(genre)
         if(movies.length > 0){

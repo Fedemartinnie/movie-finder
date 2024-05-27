@@ -17,18 +17,34 @@ export interface user {
     
 }
 
+
+export interface Images {
+    backdrops: string[];
+    logos: string[];
+    posters: string[];
+}
+
+export interface Cast{
+    name: string,
+    photo: string,
+    _id: string
+}
+
 export interface movie {
     _id: any,
     movieId: string,
     title: string,
     subtitle: string[],
     plot: string,
-    genre: genre[],//string[],
+    // genre: genre[],//string[],
+    genres: [string],
     releaseYear: string,
     duration: string,
     director: string[],
-    cast: string [],
-    images: string[],
+    // cast: string [],
+    cast: Cast[],
+    // images: string[],
+    images: Images,
     trailer: string,
     overallRating: number,
     ratingsCount: number,
@@ -41,4 +57,4 @@ export interface movie {
 }
 
 
-export type MovieSummary = Pick<movie, '_id' | 'title' | 'overallRating' | 'images' | 'genre' | 'releaseYear'>;
+export type MovieSummary = Pick<movie, '_id' | 'title' | 'overallRating' | 'images' | 'genres' | 'releaseYear'>;
