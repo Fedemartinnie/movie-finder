@@ -1,65 +1,84 @@
-import express from 'express'
-import mongoose from 'mongoose'
+import dotenv from 'dotenv';
+dotenv.config();
 
-var cookieParser = require('cookie-parser');
-var bluebird = require('bluebird');
-var cors = require('cors');
-const mainRouter = require('./routes/main.router')
+import express from 'express';
+import mongoose from 'mongoose';
+import session from 'express-session';
+import Passport from './Passport';
+import authRoutes from './routes/Auth';
+import userRoutes from './routes/User';
+import moviesRoutes from './routes/Movie';
 
-const app = express()
-app.use(express.json())
-app.disable('x-powered-by')
+const app = express();
 
-require('dotenv').config()
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.use(express.urlencoded({
-  extended: false
-}))
+app.disable('x-powered-by');
 
-//aplico cors
-app.use(cors());
-app.use(cookieParser());
-app.use(function (_req, res, next) {
+// Configure session
+app.use(session({
+  secret: 'tu_secreto', // Cambia esto por una cadena de secreto adecuada
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Configure CORS
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:8000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
 
-
-const dbURL = process.env.DATABASE
-
-mongoose.Promise = bluebird;
-let url = dbURL
-console.log("\n\nBD",url,'\n\n');
-let opts = {
-  useNewUrlParser : true, 
-  connectTimeoutMS:20000, 
+// Configure MongoDB connection
+const dbURL = process.env.DATABASE;
+mongoose.Promise = require('bluebird');
+const opts = {
+  useNewUrlParser: true,
+  connectTimeoutMS: 20000,
   useUnifiedTopology: true
-  };
-if(url){
-mongoose.connect(url,opts)
-  .then(() => {
-    console.log(`Conexión establecida con la BD.`)
-  })
-  .catch((e) => {
-    console.log(`Error Connecting to the Mongodb Database...`),
-    console.log(e)
-  })
+};
+
+if (dbURL) {
+  mongoose.connect(dbURL, opts)
+    .then(() => {
+      console.log('Connected to MongoDB.');
+    })
+    .catch((e) => {
+      console.error('Error connecting to MongoDB:', e);
+    });
 }
 
-const PORT = process.env.PORT ?? 8000
+// Initialize Passport
+app.use(Passport.initialize());
+app.use(Passport.session());
 
-app.get('/',(_req,res) => {
-    console.log("Home movie finder")
-    res.send('Movie-Finder Home')
-    
-    })
+// Authentication routes
+app.use('/', authRoutes);
+app.use('/users', userRoutes);
+app.use('/movies', moviesRoutes);
 
-app.use(mainRouter)
+// Logout route
+app.get('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).send('Error logging out');
+    }
+    res.redirect('/');
+  });
+});
 
-app.listen(PORT, () =>{
-    console.log('server running on port ',PORT)
-    console.log('DATABASE URL ',process.env.DATABASE)
-    console.log('DATABASE NAME ',process.env.DATABASE_NAME)
-})
+// Home route
+app.get('/home', (_req, res) => {
+  console.log("Home movie finder");
+  res.send('Movie-Finder Home');
+});
+
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, () => {
+  console.log('Server running on port', PORT);
+  console.log('DATABASE URL:', process.env.DATABASE);
+  console.log('DATABASE NAME:', process.env.DATABASE_NAME);
+});
