@@ -1,5 +1,8 @@
 ### inicio app 
 
+GET http://localhost:8000/movies/results?name=amigos%20imaginarios
+Content-Type: application/json
+
 ###  Home Search
 GET http://localhost:8000/movies/results?&page=2&limit=10&sortByDate=-1
 Content-Type: application/json

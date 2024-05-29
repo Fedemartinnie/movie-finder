@@ -8,7 +8,7 @@ const moviesService = require('../services/movies.services')
 exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) => {
     // const page = req.query.page ? req.query.page : 1
     const page = req.query.page ?? 1
-    const limit = req.query.limit
+    const limit = 20
     const name = req.query.name ?? null
     const sortByRating = ( req.query.sortByRating) ?? null
     const sortByDate = (req.query.sortByDate) ?? null

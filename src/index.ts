@@ -1,16 +1,17 @@
 import express from 'express'
 import mongoose from 'mongoose'
 
-var cookieParser = require('cookie-parser');
-var bluebird = require('bluebird');
-var cors = require('cors');
+const cookieParser = require('cookie-parser');
+const bluebird = require('bluebird');
+const cors = require('cors');
 const mainRouter = require('./routes/main.router')
+
+require('dotenv').config()
 
 const app = express()
 app.use(express.json())
 app.disable('x-powered-by')
 
-require('dotenv').config()
 
 app.use(express.urlencoded({
   extended: false
@@ -19,8 +20,14 @@ app.use(express.urlencoded({
 //aplico cors
 app.use(cors());
 app.use(cookieParser());
+// app.use(cors({
+//   origin: 'http://localhost:8081', // URL del frontend
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+//   credentials: true,
+// }))
 app.use(function (_req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:8000");
+  res.header("Access-Control-Allow-Origin", "http://localhost:8081");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
@@ -30,13 +37,16 @@ app.use(function (_req, res, next) {
 const dbURL = process.env.DATABASE
 
 mongoose.Promise = bluebird;
+
 let url = dbURL
 console.log("\n\nBD",url,'\n\n');
+
 let opts = {
   useNewUrlParser : true, 
   connectTimeoutMS:20000, 
   useUnifiedTopology: true
   };
+
 if(url){
 mongoose.connect(url,opts)
   .then(() => {
