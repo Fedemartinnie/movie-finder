@@ -9,7 +9,7 @@ type IUserDocument = IUser & Document; // Definir el tipo de documento de usuari
 Passport.use(new GoogleStrategy({
   clientID: process.env.CLIENTE_ID || '', // ID del cliente proporcionado por Google
   clientSecret: process.env.SECRET_CLIENTE || '', // Clave secreta del cliente proporcionada por Google
-  callbackURL: 'http://localhost:8000', // URL de redireccionamiento después de la autenticación exitosa
+  callbackURL: 'http://192.168.1.6:8000', // URL de redireccionamiento después de la autenticación exitosa
 }, async (accessToken, refreshToken, profile, done) => { // Callback para manejar la autenticación exitosa
   try {
     console.log('Google profile received:', JSON.stringify(profile, null, 2)); // Mostrar el perfil de Google recibido

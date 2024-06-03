@@ -4,10 +4,10 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import session from 'express-session';
-import Passport from './Passport';
 import authRoutes from './routes/Auth';
 import userRoutes from './routes/User';
 import moviesRoutes from './routes/Movie';
+import passport from './Passport'; // Ajusta la ruta según la ubicación real de tu archivo passport
 
 const app = express();
 
@@ -51,8 +51,8 @@ if (dbURL) {
 }
 
 // Initialize Passport
-app.use(Passport.initialize());
-app.use(Passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Authentication routes
 app.use('/', authRoutes);
