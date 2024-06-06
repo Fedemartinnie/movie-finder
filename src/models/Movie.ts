@@ -2,6 +2,18 @@ var mongoose = require('mongoose')
 var mongoosePaginate = require('mongoose-paginate')
 //const z = require('zod') // agregarlo al movieSchema
 
+const imagesSchema = new mongoose.Schema({
+    backdrops: [String],
+    logos: [String],
+    posters: [String]
+})
+
+const castSchema = new mongoose.Schema({
+    name: String,
+    photo: String,
+    // _id: String
+})
+
 const moviesSchema = new mongoose.Schema({
     movieId: {
         type: String,
@@ -14,12 +26,12 @@ const moviesSchema = new mongoose.Schema({
     },
     subtitle: [String],
     plot: String,
-    genre: [String],
-    releaseYear: Number, //debe ser año o fecha completa?
+    genres: [String],
+    releaseYear: String,
     duration: String,
-    director: String,
-    cast: [String],
-    images: [String],
+    director: [castSchema],    
+    cast: [castSchema],
+    images: imagesSchema,
     trailer: String, //debe ser un Array => varios trailers
     overallRating: Number,
     ratingsCount: Number,

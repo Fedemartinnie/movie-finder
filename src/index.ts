@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 import authRoutes from './routes/Auth';
 import userRoutes from './routes/User';
-import moviesRoutes from './routes/Movie';
+import movieRoutes from './routes/Movie';
 import passport from './Passport'; // Ajusta la ruta según la ubicación real de tu archivo passport
 
 const app = express();
@@ -57,7 +57,7 @@ app.use(passport.session());
 // Authentication routes
 app.use('/', authRoutes);
 app.use('/users', userRoutes);
-app.use('/movies', moviesRoutes);
+app.use('/movies', movieRoutes);
 
 // Logout route
 app.get('/logout', (req, res) => {

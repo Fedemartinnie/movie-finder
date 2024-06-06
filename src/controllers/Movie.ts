@@ -1,75 +1,67 @@
-import { Movie, MovieSummary } from '../types';
-const MovieModel = require('../models/Movie');
+import {Request, Response, NextFunction } from "express"
+import { MovieSummary, movie } from "../types"
+const moviesService = require('../services/movies.services')
+
+// const _this = this
 
 
-export const latest = async (page: number, limit: number) => {
+exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) => {
+    // const page = req.query.page ? req.query.page : 1
+    const page = req.query.page ?? 1
+    const limit = 21
+    const name = req.query.name ?? null
+    const sortByRating = ( req.query.sortByRating) ?? null
+    const sortByDate = (req.query.sortByDate) ?? null
+    const genre = req.query.genre ?? null
+    console.log('page controller---> ', page)
+    console.log('query controller---> ', req.query)
+
     try {
-        const movies: Movie[] | null = await MovieModel.find()
-            .select('_id title releaseYear overallRating genre images')
-            .sort({ releaseYear: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit);
-        return movies;
-    } catch (error) {
-        throw new Error('Error fetching latest movies');
-    }
-};
-
-export const search = async (name: string) => {
-    try {
-        const movies: MovieSummary[] = await MovieModel.find({
-            $or: [
-                { title: new RegExp(name, 'i') },
-                { cast: { $regex: new RegExp(name, 'i') } }
-            ]
-        }).select('_id title releaseYear overallRating genre images');
-        return movies;
-    } catch (error) {
-        throw new Error('Error searching movies');
-    }
-};
-
-export const filterByGenre = async (genre: string) => {
-    try {
-        const movies: MovieSummary[] = await MovieModel.find({
-            genre: new RegExp(genre, 'i')
-        }).select('_id title releaseYear overallRating images genre');
-        return movies;
-    } catch (error) {
-        throw new Error('Error filtering movies by genre');
-    }
-};
-
-export const rate = async (rate: number, movieId: string, userId: string) => {
-    try {
-        const movie = await MovieModel.findById(movieId).select('overallRating ratingsCount ratings');
-        const userRatingIndex = movie.ratings.findIndex((rating: { userId: string }) => rating.userId === userId);
-        const initRatingsCount = movie.ratingsCount;
-        const newRating = { userId, rate };
-        
-        if (userRatingIndex === -1) {
-            movie.ratingsCount += 1;
-            movie.ratings.push(newRating);
-        } else {
-            movie.overallRating = ((movie.overallRating * initRatingsCount) - movie.ratings[userRatingIndex].rate) / (initRatingsCount - 1);
-            movie.ratings[userRatingIndex].rate = rate;
+        const movies: Array<MovieSummary> = await moviesService.moviesResult(page, limit, name, sortByDate, sortByRating, genre)
+        console.log('movies --> ', movies)
+        if(movies.length > 0){
+            return res.status(200).json({data: movies, message: 'Succesfully movies recieved'})
         }
-
-        const newRate: number = ((movie.overallRating * initRatingsCount) + rate) / (movie.ratingsCount);
-        movie.overallRating = newRate;
-
-        const newOverallRating = await movie.save();
-        return newOverallRating;
-    } catch (error) {
-        throw new Error('Error rating the movie');
+        return res.status(404).json({message: 'No data available'})        
+    } catch {
+        return res.status(500).json({message: 'Server Error'})
     }
-};
+}
 
-export const getMovie = async (movieId: string) => {
+
+exports.rate = async (req: Request, res: Response) => {
+    const movieId = req.params.id
+    const rate = req.body.rate
+    const userId = req.body.userId
     try {
-        const movie = await MovieModel.findById(movieId);
-        return movie;
+        const movie : movie = await moviesService.rate(rate, movieId, userId)
+        if(movie){
+            return res.status(200).json({data: movie, message: 'The movie was successfully rated'})
+        }
+        return res.status(404).json({message: "Error while rating the movie"})
+    }
+    catch {
+        return res.status(500).json({message: 'Server Error'})
+    }
+}
+
+
+exports.getMovie = async (req: Request, res:Response) => {
+    console.log('********************************\nGet Movie');
+    const movieId = req.params.id;
+    console.log('\n***************************\n MovieId : ', movieId);
+
+    try {
+        const movie = await moviesService.getMovie(movieId);
+        console.log("moviee ----> \n", movie);
+
+        if (movie) {
+            return res.status(200).json(movie);
+        } else {
+            return res.status(404).json({ message: 'The movie was not found' });
+        }
     } catch (error) {
-        throw new Error('Error getting the movie');
+        console.error('Error fetching movie:', error)        
+        return res.status(500).json({ message: "Server Error" });
     }
 };
