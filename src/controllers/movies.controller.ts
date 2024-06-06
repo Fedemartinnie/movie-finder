@@ -8,12 +8,12 @@ const moviesService = require('../services/movies.services')
 exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) => {
     // const page = req.query.page ? req.query.page : 1
     const page = req.query.page ?? 1
-    const limit = 20
+    const limit = 21
     const name = req.query.name ?? null
     const sortByRating = ( req.query.sortByRating) ?? null
     const sortByDate = (req.query.sortByDate) ?? null
     const genre = req.query.genre ?? null
-    console.log('genre controller---> ', page)
+    console.log('page controller---> ', page)
     console.log('query controller---> ', req.query)
 
     try {
@@ -46,18 +46,22 @@ exports.rate = async (req: Request, res: Response) => {
 }
 
 
-exports.getMovie = async (req: Request, res: Response) => {
-    const movieId = req.params.id
+exports.getMovie = async (req: Request, res:Response) => {
+    console.log('********************************\nGet Movie');
+    const movieId = req.params.id;
+    console.log('\n***************************\n MovieId : ', movieId);
 
-    try{
-        const movie: movie = await moviesService.getMovie(movieId)
-        console.log("moviee ----> ",movie)
-        if(movie){
-            return movie
+    try {
+        const movie = await moviesService.getMovie(movieId);
+        console.log("moviee ----> \n", movie);
+
+        if (movie) {
+            return res.status(200).json(movie);
+        } else {
+            return res.status(404).json({ message: 'The movie was not found' });
         }
-        return res.status(404).json({message: 'The movie was not found'})
+    } catch (error) {
+        console.error('Error fetching movie:', error)        
+        return res.status(500).json({ message: "Server Error" });
     }
-    catch{
-        return res.status(500).json({message: "Server Error"})
-    }
-}
+};

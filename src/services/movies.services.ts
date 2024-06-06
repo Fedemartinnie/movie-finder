@@ -2,21 +2,18 @@
 import { movie } from '../types'
 const MovieModel = require('../models/movies.model')
 
+
 //agregar keys de la nueva BD (trailers , portrait, landscape, etc)
 exports.moviesResult = async (page: number, limit: number, name: string | null, sortByDate: number | null, sortByRating: number | null, genre: string | null) => {
     let sortParam: any = {};
     
     if(sortByDate){
         sortParam.releaseYear = Number(sortByDate)
-        console.log("date ",sortByDate)
     }
     if (sortByRating) {
         sortParam.overallRating = Number(sortByRating)
-        console.log("rating ", sortByRating)
     }
     
-    console.log('sortParam --> ',sortParam)
-
     const query: any = {};
 
     if (name) {
@@ -25,23 +22,16 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
             { 'cast.name': { $regex: new RegExp(name, 'i') } }
         ];
     }
-    console.log('genre ',genre)
-    console.log(genre!==null)
+
+    console.log('query----> ',sortParam)
+    console.log('query----> ',query)
+
     if (genre){
         query.genres = { $regex: new RegExp(genre, 'i') }
     }
 
-    console.log('query ----> ',query)
-    console.log('query.genres ----> ',query.genres)
-
-
     try {
-        // const projection = {
-        //     cast: { $slice: 15 },
-        //     'images.backdrops': { $slice: 10 },
-        //     'images.logos': { $slice: 10 },
-        //     'images.posters': { $slice: 10 }
-        // }
+
         const movies: Array<movie> | null = await MovieModel.find(query)
             .select({
             '_id': 1,
@@ -49,15 +39,13 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
             'releaseYear': 1,
             'genres': 1,
             'overallRating': 1,
-            'images.backdrops': { $slice: 2 },            
+            'images.backdrops': { $slice: 10 },            
             'images.posters': { $slice: 2 },
-            // 'cast': { $slice: 12 }
         })
             .sort(sortParam)
             .skip((page - 1) * limit)
             .limit(limit);
         return movies;
-
     }
     catch {
         throw new Error()
@@ -101,13 +89,15 @@ exports.getMovie = async (movieId: number) => {
                 releaseYear: 1,
                 duration: 1,
                 genres: 1,
-                trailer: 1,
+                // trailer: 1,
                 plot: 1,
                 'overallRating': 1,            
                 'images.backdrops': { $slice: 10 },
+                'images.posters': { $slice: 10 },
                 cast: { $slice: 12 },
                 director: { $slice: 3 },
             })
+            
         return movie
     }
     catch{

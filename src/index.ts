@@ -20,12 +20,6 @@ app.use(express.urlencoded({
 //aplico cors
 app.use(cors());
 app.use(cookieParser());
-// app.use(cors({
-//   origin: 'http://localhost:8081', // URL del frontend
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-//   credentials: true,
-// }))
 app.use(function (_req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:8081");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
