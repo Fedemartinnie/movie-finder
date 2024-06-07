@@ -22,7 +22,9 @@ exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) 
         if(movies.length > 0){
             return res.status(200).json({data: movies, message: 'Succesfully movies recieved'})
         }
-        return res.status(404).json({message: 'No data available'})        
+        if(movies.length === 0)
+            return res.status(404).json({message: 'No data available'})        
+        return
     } catch {
         return res.status(500).json({message: 'Server Error'})
     }
