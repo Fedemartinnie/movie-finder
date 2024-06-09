@@ -5,7 +5,6 @@ export type genre = 'Action' | 'Adventure' | 'Animation' | 'Biography' |
                      'Sport' | 'Superhero' | 'Thriller' | 'War' | 'Western'
 
 export interface User {
-    userId: string;
     name: string;
     lastname: string;
     alias: string; // Campo opcional
@@ -13,8 +12,6 @@ export interface User {
     profileImage?: string;
     accessToken?: string;
     refreshTokens?: string[];
-    favorites?: string[];
-    
 }
 
 
@@ -32,7 +29,6 @@ export interface Cast{
 
 export interface movie {
     _id: any,
-    movieId: string,
     title: string,
     subtitle: string[],
     plot: string,

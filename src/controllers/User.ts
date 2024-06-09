@@ -103,52 +103,6 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-// Obtener un usuario por su ID
-export const getUserById = async (req: Request, res: Response) => {
-  const userId = req.params.id;
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.status(200).json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-// Actualizar un usuario existente
-export const updateUser = async (req: Request, res: Response) => {
-  const userId = req.params.id;
-  const userData: IUser = req.body;
-  try {
-    const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-// Eliminar un usuario por su ID
-export const deleteUser = async (req: Request, res: Response) => {
-  const userId = req.params.id;
-  try {
-    const deletedUser = await User.findByIdAndDelete(userId);
-    if (!deletedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.status(200).json({ message: 'User deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.user) {
@@ -179,5 +133,56 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
   } catch (error) {
     console.error('Error during logout:', error);
     next(error);
+  }
+};
+
+// Obtener un usuario por su ID
+export const getUserById = async (req: Request, res: Response) => {
+  const userId = req.user; // Usamos el userId recuperado del middleware de autenticación
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// Actualizar un usuario existente
+export const updateUser = async (req: Request, res: Response) => {
+  const userId = req.user; 
+  const userData: Partial<IUser> = req.body;
+  try {
+    if ('email' in userData) {
+      delete userData.email;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+// Eliminar un usuario por su ID
+export const deleteUser = async (req: Request, res: Response) => {
+  const userId = req.user; // Usamos el userId recuperado del middleware de autenticación
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
   }
 };

@@ -1,11 +1,16 @@
 import express  from "express"
+import authorizationMiddleware from '../utils/Middleware';
 
-let router = express.Router()
 const moviesController = require('../controllers/Movie')
-// var authorization = require()
+const router = express.Router();
 
-//falta agregar el Authorization --> cuando tengamos el googleSignIn
-router.get('/results', moviesController.moviesResult)
-router.get('/:id', moviesController.getMovie)
-router.put('/rating/:id', moviesController.rate)
+router.get('/results', authorizationMiddleware, moviesController.moviesResult);
+router.get('/:id', authorizationMiddleware, moviesController.getMovie);
+router.put('/rating/:id', authorizationMiddleware, moviesController.rate);
+
+/*
+router.get('/results', moviesController.moviesResult);
+router.get('/:id', moviesController.getMovie);
+router.put('/rating/:id', moviesController.rate);*/
+
 export default router;
