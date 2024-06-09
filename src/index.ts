@@ -18,7 +18,7 @@ app.disable('x-powered-by');
 
 // Configure session
 app.use(session({
-  secret: 'tu_secreto', // Cambia esto por una cadena de secreto adecuada
+  secret: 'tu_secreto', // Cambiar por otro string
   resave: false,
   saveUninitialized: true
 }));
@@ -59,6 +59,7 @@ app.use('/', authRoutes);
 app.use('/users', userRoutes);
 app.use('/movies', movieRoutes);
 
+
 // Logout route
 app.get('/logout', (req, res) => {
   req.logout((err) => {
@@ -73,6 +74,15 @@ app.get('/logout', (req, res) => {
 app.get('/home', (_req, res) => {
   console.log("Home movie finder");
   res.send('Movie-Finder Home');
+});
+
+//* CLOUDINARY
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'ddy10tgci', 
+  api_key: '187851378689789', 
+  api_secret: 'y4TsRDQJeWiYxY1Sxd5cJx-iz40' 
 });
 
 const PORT = process.env.PORT || 8000;
