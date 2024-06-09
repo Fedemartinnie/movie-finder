@@ -4,15 +4,15 @@ GET http://localhost:8000/movies/results?name=amigos%20imaginarios
 Content-Type: application/json
 
 ###  Home Search
-GET http://localhost:8000/movies/results?&page=2&limit=10&sortByDate=-1
+GET http://localhost:8000/movies/?&page=2&limit=10&sortByDate=-1
 Content-Type: application/json
 
 ### Search by Title + sort by rating 
-GET http://localhost:8000/movies/results?&name=godzilla&limit=10&sortByRating=1
+GET http://localhost:8000/movies/?&name=godzilla&limit=10&sortByRating=1
 Content-Type: application/json
 
 ### Search by Actor
-GET http://localhost:8000/movies/results?&name=ryan%20reynolds&page=1&limit=10&sortByDate=-1
+GET http://localhost:8000/movies/?&name=ryan%20reynolds&page=1&limit=10&sortByDate=-1
 Content-Type: application/json
 
 ### Search by Genre
