@@ -1,6 +1,6 @@
 //import { string } from 'zod'
 import { movie } from '../types'
-const MovieModel = require('../models/movies.model')
+const MovieModel = require('../models/Movie')
 
 
 //agregar keys de la nueva BD (trailers , portrait, landscape, etc)
@@ -39,10 +39,10 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
             .select({
             '_id': 1,
             'title': 1,
-            // 'releaseYear': 1,
-            // 'genres': 1,
-            // 'overallRating': 1,
-            // 'images.backdrops': { $slice: 10 },            
+            'releaseYear': 1,
+            'genres': 1,
+            'overallRating': 1,
+            'images.backdrops': { $slice: 10 },            
             'images.posters': { $slice: 2 },
         })
             .sort(sortParam)

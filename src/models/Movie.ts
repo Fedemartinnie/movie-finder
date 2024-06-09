@@ -15,11 +15,6 @@ const castSchema = new mongoose.Schema({
 })
 
 const moviesSchema = new mongoose.Schema({
-    movieId: {
-        type: String,
-        required: true,
-        unique: true
-    },
     title: {
         type: String,
         required: true
