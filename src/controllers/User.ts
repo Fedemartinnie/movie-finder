@@ -13,7 +13,7 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
     const lastname = userProfile.familyName || userProfile.lastname || '';
     const email = userProfile.email || '';
     const profileImage = userProfile.photo || userProfile.profileImage || '';
-    
+    console.log('token --------> ', token)
     if (!userId || !name || !lastname || !profileImage) {
       throw new Error('Faltan campos requeridos para registrar el usuario');
     }
@@ -106,7 +106,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.user) {
-      const userId = req.params.id;
+      const userId = req.params.id; //? no debe sacarlo de req.user.id? 
       const user = await User.findById(userId);
       if (user) {
         user.accessToken = '';

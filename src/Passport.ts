@@ -3,13 +3,19 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User, { IUser } from './models/User'; // Importar el modelo de usuario
 import { Document } from 'mongoose';
 
+
+//! cambiar IP segun rama
+const URI = 'http://192.168.0.73:8000' //! ip fede
+// const URI = 'http://192.168.1.6:8000'     //! ip jere
+// const URI = 'http://18.118.165.190:8000' //* AWS ip
+
 type IUserDocument = IUser & Document; // Definir el tipo de documento de usuario
 
 // Configurar Passport para usar la estrategia de Google OAuth 2.0
 Passport.use(new GoogleStrategy({
   clientID: process.env.CLIENTE_ID || '', // ID del cliente proporcionado por Google
   clientSecret: process.env.SECRET_CLIENTE || '', // Clave secreta del cliente proporcionada por Google
-  callbackURL: 'http://192.168.1.6:8000', // URL de redireccionamiento después de la autenticación exitosa
+  callbackURL: URI, // URL de redireccionamiento después de la autenticación exitosa
 }, async (accessToken, refreshToken, profile, done) => { // Callback para manejar la autenticación exitosa
   try {
     console.log('Google profile received:', JSON.stringify(profile, null, 2)); // Mostrar el perfil de Google recibido
