@@ -1,5 +1,8 @@
 ### inicio app 
 
+        
+POST http://localhost:8000/favorites
+
 GET http://localhost:8000/movies/results?name=amigos%20imaginarios
 Content-Type: application/json
 
