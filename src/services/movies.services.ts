@@ -3,7 +3,7 @@ import { movie } from '../types'
 const MovieModel = require('../models/Movie')
 
 
-//agregar keys de la nueva BD (trailers , portrait, landscape, etc)
+//*MOVIES RESULT
 exports.moviesResult = async (page: number, limit: number, name: string | null, sortByDate: number | null, sortByRating: number | null, genre: string | null) => {
     let sortParam: any = {};
     
@@ -56,7 +56,7 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
 
 }
 
-// Rate Movie
+//* RATE MOVIE
 exports.rate = async (rate: number, movieId: string, userId: string) => {    
     try{        
         const movie = await MovieModel.findById(movieId).select('overallRating ratingsCount ratings')

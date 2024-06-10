@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Favorite from '../models/Favorite';
 
+//* ADD FAVORITES
 export const createFavorite = async (req: Request, res: Response, next: NextFunction) => {
   const { movieId, moviePosterURL } = req.body;
   const userId = req.user;
@@ -31,6 +32,7 @@ export const createFavorite = async (req: Request, res: Response, next: NextFunc
   }
 };
 
+//* GET FAVORITES
 export const getFavorites = async (req: Request, res: Response, next: NextFunction) => {
   const idUser = req.user;
 
@@ -51,6 +53,7 @@ export const getFavorites = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
+//* DELETE FAVORITE
 export const deleteFavorite = async (req: Request, res: Response, next: NextFunction) => {
   const { movieId } = req.params;
   const userId = req.user; // Obtén el userId del usuario autenticado desde req.user
