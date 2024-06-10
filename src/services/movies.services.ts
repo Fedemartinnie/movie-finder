@@ -92,7 +92,7 @@ exports.getMovie = async (movieId: number) => {
                 releaseYear: 1,
                 duration: 1,
                 genres: 1,
-                // trailer: 1,
+                trailer: 1,
                 plot: 1,
                 'overallRating': 1,            
                 'images.backdrops': { $slice: 10 },

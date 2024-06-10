@@ -32,7 +32,7 @@ const moviesSchema = new mongoose.Schema({
     director: [castSchema],    
     cast: [castSchema],
     images: imagesSchema,
-    trailer: String, //debe ser un Array => varios trailers
+    trailer: [String], //debe ser un Array => varios trailers
     overallRating: Number,
     ratingsCount: Number,
     ratings: [

@@ -47,9 +47,9 @@ exports.rate = async (req: Request, res: Response) => {
 
 
 exports.getMovie = async (req: Request, res:Response) => {
-    console.log('********************************\nGet Movie');
+    console.log('********************************\nGET MOVIE');
     const movieId = req.params.id;
-    console.log('\n***************************\n MovieId : ', movieId);
+    console.log('\n***************************\n MOVIEID : ', movieId);
 
     try {
         const movie = await moviesService.getMovie(movieId);

@@ -54,7 +54,7 @@ export interface movie {
     cast: Cast[],
     // images: string[],
     images: Images,
-    trailer: string,
+    trailer: string[],
     overallRating: number,
     ratingsCount: number,
     ratings: [
