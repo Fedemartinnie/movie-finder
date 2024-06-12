@@ -5,9 +5,9 @@ import { Document } from 'mongoose';
 
 type IUserDocument = IUser & Document; // Definir el tipo de documento de usuario
 
-const URI = 'http://192.168.0.73:8000' //! ip fede
+// const URI = 'http://192.168.0.73:8000' //! ip fede
 // const URI = 'http://192.168.1.6:8000'     //! ip jere
-// const URI = 'http://18.118.165.190:8000' //* AWS ip
+ const URI = 'http://3.129.66.198:8000' //* AWS ip
 
 // Configurar Passport para usar la estrategia de Google OAuth 2.0
 Passport.use(new GoogleStrategy({
