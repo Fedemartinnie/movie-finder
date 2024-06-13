@@ -7,22 +7,22 @@ type IUserDocument = IUser & Document; // Definir el tipo de documento de usuari
 
 // const URI = 'http://192.168.0.73:8000' //! ip fede
 // const URI = 'http://192.168.1.6:8000'     //! ip jere
- const URI = 'http://18.221.46.103:8000' //* AWS ip
+const URI = 'http://18.221.46.103:8000' //* AWS ip
 
 // Configurar Passport para usar la estrategia de Google OAuth 2.0
 Passport.use(new GoogleStrategy({
-  clientID: process.env.CLIENTE_ID || '', // ID del cliente proporcionado por Google
-  clientSecret: process.env.SECRET_CLIENTE || '', // Clave secreta del cliente proporcionada por Google
-  callbackURL: URI, // URL de redireccionamiento después de la autenticación exitosa
-}, async (accessToken, refreshToken, profile, done) => { // Callback para manejar la autenticación exitosa
+  clientID: process.env.CLIENTE_ID || '',
+  clientSecret: process.env.SECRET_CLIENTE || '',
+  callbackURL: URI,
+}, async (accessToken, refreshToken, profile, done) => {
   try {
-    console.log('Google profile received:', JSON.stringify(profile, null, 2)); // Mostrar el perfil de Google recibido
+    console.log('Google profile received:', JSON.stringify(profile, null, 2));
 
-    // Buscar el usuario en la base de datos por su ID de Google
-    let user = await User.findOne({ userId: profile.id });
+    // Verificar si el usuario ya existe por su correo electrónico
+    let user = await User.findOne({ email: profile.emails?.[0]?.value });
 
-    // Si el usuario no existe, crear uno nuevo con los datos del perfil de Google
     if (!user) {
+      // Si el usuario no existe, crear uno nuevo
       user = new User({
         userId: profile.id,
         name: profile.name?.givenName || '',
@@ -34,20 +34,20 @@ Passport.use(new GoogleStrategy({
       });
 
       await user.save(); // Guardar el nuevo usuario en la base de datos
-      console.log('New user created:', user); // Mostrar el usuario creado en la consola
+      console.log('New user created:', user);
     } else {
       // Si el usuario ya existe, actualizar su token de acceso
       user.accessToken = accessToken;
       await user.save(); // Guardar los cambios en el usuario en la base de datos
-      console.log('Existing user updated:', user); // Mostrar el usuario actualizado en la consola
+      console.log('Existing user updated:', user);
     }
 
-    return done(null, user); // Llamar a la función 'done' con el usuario como argumento para indicar éxito en la autenticación
+    return done(null, user);
   } catch (err) {
-    console.error('Error during authentication:', err); // Manejar cualquier error durante la autenticación
-    return done(err, false); // Llamar a la función 'done' con el error como argumento para indicar fallo en la autenticación
+    console.error('Error during authentication:', err);
   }
 }));
+
 
 // Configurar la serialización del usuario para almacenar solo su ID en la sesión
 Passport.serializeUser((user, done) => {
