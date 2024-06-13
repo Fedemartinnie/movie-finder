@@ -18,10 +18,20 @@ Passport.use(new GoogleStrategy({
   try {
     console.log('Google profile received:', JSON.stringify(profile, null, 2));
 
-    // Verificar si el usuario ya existe por su correo electrónico
-    let user = await User.findOne({ email: profile.emails?.[0]?.value });
+    // Buscar el usuario en la base de datos por su ID de Google
+    let user = await User.findOne({ userId: profile.id });
 
+    // Si el usuario no existe, crear uno nuevo con los datos del perfil de Google
     if (!user) {
+      // Verificar si el usuario ya existe por su correo electrónico
+      user = await User.findOne({ email: profile.emails?.[0]?.value });
+      
+      // Si el usuario ya existe, devolver el usuario existente
+      if (user) {
+        console.log('Existing user found:', user);
+        return done(null, user);
+      }
+      
       // Si el usuario no existe, crear uno nuevo
       user = new User({
         userId: profile.id,
@@ -33,20 +43,22 @@ Passport.use(new GoogleStrategy({
         refreshTokens: []
       });
 
-      await user.save(); // Guardar el nuevo usuario en la base de datos
+      await user.save();
       console.log('New user created:', user);
     } else {
-      // Si el usuario ya existe, actualizar su token de acceso
+      // Actualizar solo los campos de autenticación si el usuario ya existe
       user.accessToken = accessToken;
-      await user.save(); // Guardar los cambios en el usuario en la base de datos
+      await user.save();
       console.log('Existing user updated:', user);
     }
 
     return done(null, user);
   } catch (err) {
     console.error('Error during authentication:', err);
+    return done(err, false);
   }
 }));
+
 
 
 // Configurar la serialización del usuario para almacenar solo su ID en la sesión
