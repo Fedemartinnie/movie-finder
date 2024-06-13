@@ -18,7 +18,7 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
       throw new Error('Faltan campos requeridos para registrar el usuario');
     }
 
-    let user = await User.findOne({ userId });
+    let user = await User.findOne({ email });
     if (!user) {
       // Si el usuario no existe, crea uno nuevo
       const newUser = new User({
@@ -44,7 +44,6 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
   }
 }
 
-const client = new OAuth2Client(process.env.CLIENTE_ID || '');
 
 export const handleGoogleAuthCallback = async (accessToken: string, refreshToken: string, profile: Profile, done: Function) => {
   try {
