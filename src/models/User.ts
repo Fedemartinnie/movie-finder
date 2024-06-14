@@ -4,7 +4,8 @@ export interface IUser extends Document {
   accessToken: string;
   email: string;
   name: string;
-  lastname: string;
+  lastname: string;  
+  nickname: string;
   profileImage: string;
 }
 
@@ -14,6 +15,7 @@ const UserSchema: Schema = new Schema({
   name: { type: String, required: true },
   lastname: { type: String, required: true },
   profileImage: { type: String, required: true },
+  nickname: { type: String, required: false },
   refreshTokens: { type: [String], default: [] }
 });
 

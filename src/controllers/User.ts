@@ -18,7 +18,7 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
       throw new Error('Faltan campos requeridos para registrar el usuario');
     }
 
-    const user = await User.findOne({ userId });
+    let user = await User.findOne({ email });
     if (!user) {
       // Si el usuario no existe, crea uno nuevo
       const newUser = new User({
@@ -27,13 +27,16 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
         lastname,
         email,
         profileImage,
-        accessToken: token,
+        accessToken: token, // Guarda el token de acceso aquí
         refreshTokens: []
       });
       await newUser.save();
       console.log('Usuario registrado:', newUser);
     } else {
-      console.log('El usuario ya está registrado:', user);
+      // Si el usuario ya existe, actualiza el token de acceso
+      user.accessToken = token;
+      await user.save();
+      console.log('Token de acceso actualizado para el usuario:', user);
     }
   } catch (error) {
     console.error('Error al procesar el token de Google:', error);
@@ -41,7 +44,6 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
   }
 }
 
-const client = new OAuth2Client(process.env.CLIENTE_ID || '');
 
 export const handleGoogleAuthCallback = async (accessToken: string, refreshToken: string, profile: Profile, done: Function) => {
   try {

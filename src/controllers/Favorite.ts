@@ -3,7 +3,11 @@ import Favorite from '../models/Favorite';
 
 //* ADD FAVORITES
 export const createFavorite = async (req: Request, res: Response, next: NextFunction) => {
-  const { movieId, moviePosterURL } = req.body;
+  // const { movieId, moviePosterURL } = req.body;
+  const movieId = req.body.id
+  const moviePosterURL = req.body.poster
+  console.log('movieId', movieId)
+  console.log('movieId', moviePosterURL)
   const userId = req.user;
   console.log("user",userId);
   console.log("movie",movieId);
