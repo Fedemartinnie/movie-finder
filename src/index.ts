@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 import authRoutes from './routes/Auth';
 import userRoutes from './routes/User';
-import movieRoutes from './routes/Movie';
+import movieRoutes from './routes/movie.router';
 import passport from './Passport'; // Ajusta la ruta según la ubicación real de tu archivo passport
 
 const app = express();

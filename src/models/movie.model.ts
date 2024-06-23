@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
 var mongoosePaginate = require('mongoose-paginate')
-//const z = require('zod') // agregarlo al movieSchema
+
 
 const imagesSchema = new mongoose.Schema({
     backdrops: [String],

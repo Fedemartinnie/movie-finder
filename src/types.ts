@@ -5,20 +5,21 @@ export type genre = 'Action' | 'Adventure' | 'Animation' | 'Biography' |
                     'Sport' | 'Superhero' | 'Thriller' | 'War' | 'Western'
 
 export interface User {
-    name: string;
-    lastname: string;
-    alias: string; // Campo opcional
-    email: string;
-    profileImage?: string;
-    accessToken?: string;
-    refreshTokens?: string[];
+    name: string
+    lastname: string
+    nickname: string
+    alias: string // Campo opcional
+    email: string
+    profileImage?: string
+    accessToken?: string
+    refreshTokens?: string[]
 }
 
 
 export interface Images {
-    backdrops: string[];
-    logos: string[];
-    posters: string[];
+    backdrops: string[]
+    logos: string[]
+    posters: string[]
 }
 
 export interface Cast{
@@ -29,9 +30,9 @@ export interface Cast{
 
 
 export interface Images {
-    backdrops: string[];
-    logos: string[];
-    posters: string[];
+    backdrops: string[]
+    logos: string[]
+    posters: string[]
 }
 
 export interface Cast{
@@ -66,4 +67,4 @@ export interface movie {
 }
 
 
-export type MovieSummary = Pick<movie, '_id' | 'title' | 'overallRating' | 'images' | 'genres' | 'releaseYear'>;
+export type MovieSummary = Pick<movie, '_id' | 'title' | 'overallRating' | 'images' | 'genres' | 'releaseYear'>

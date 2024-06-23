@@ -4,7 +4,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { Profile } from 'passport';
 import { HydratedDocument } from 'mongoose';
 
-// Registro
+//* REGISTRO DE USUARIO
 export async function registerUser(userProfile: any, token: string): Promise<void> {
   try {
     // Asegúrate de que todos los campos necesarios estén presentes y asignados
@@ -44,7 +44,7 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
   }
 }
 
-
+//* GOOGLE AUTH CALLBACK
 export const handleGoogleAuthCallback = async (accessToken: string, refreshToken: string, profile: Profile, done: Function) => {
   try {
     console.log('Google profile received:', JSON.stringify(profile, null, 2));
@@ -77,11 +77,13 @@ export const handleGoogleAuthCallback = async (accessToken: string, refreshToken
   }
 };
 
+//* SERIALIZA USER
 export const serializeUser = (user: HydratedDocument<any>, done: Function) => {
   console.log('usuario: ', user);
   done(null, user._id);
 };
 
+//* DESERIALIZE USER
 export const deserializeUser = async (id: string, done: Function) => {
   try {
     const user = await User.findById(id);
@@ -94,7 +96,7 @@ export const deserializeUser = async (id: string, done: Function) => {
 };
 
 
-// Obtener todos los usuarios
+//* GET ALL USERS
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find();
@@ -105,6 +107,7 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+//* LOGOUT
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.user) {
@@ -138,7 +141,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-// Obtener un usuario por su ID
+//* GET USER BY ID
 export const getUserById = async (req: Request, res: Response) => {
   const userId = req.user; // Usamos el userId recuperado del middleware de autenticación
   try {
@@ -153,7 +156,7 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-// Actualizar un usuario existente
+//* UPDATE EXISTING USER
 export const updateUser = async (req: Request, res: Response) => {
   const userId = req.user; 
   const userData: Partial<IUser> = req.body;
@@ -174,14 +177,17 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 
-// Eliminar un usuario por su ID
+//* DELETE USER BY ID
 export const deleteUser = async (req: Request, res: Response) => {
   const userId = req.user; // Usamos el userId recuperado del middleware de autenticación
+  console.log(userId)
   try {
     const deletedUser = await User.findByIdAndDelete(userId);
     if (!deletedUser) {
+      console.log('usuario no eliminado :')
       return res.status(404).json({ message: 'User not found' });
     }
+    console.log('deletedUser? ---> \n',deletedUser)
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error(error);

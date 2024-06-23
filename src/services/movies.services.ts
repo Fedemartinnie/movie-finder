@@ -1,6 +1,6 @@
 //import { string } from 'zod'
 import { movie } from '../types'
-const MovieModel = require('../models/Movie')
+const MovieModel = require('../models/movie.model')
 
 
 //*MOVIES RESULT

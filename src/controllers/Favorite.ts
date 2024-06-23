@@ -5,13 +5,9 @@ import Favorite from '../models/Favorite';
 export const createFavorite = async (req: Request, res: Response, next: NextFunction) => {
   // const { movieId, moviePosterURL } = req.body;
   const movieId = req.body.id
-  const moviePosterURL = req.body.poster
-  console.log('movieId', movieId)
-  console.log('movieId', moviePosterURL)
+  const moviePosterURL = req.body.poster  
   const userId = req.user;
-  console.log("user",userId);
-  console.log("movie",movieId);
-  console.log("poster",moviePosterURL);
+
   if (!userId || !movieId || !moviePosterURL) {
     return res.status(400).json({ error: 'Some of the parameters are missing: movieId, moviePosterURL are required.' });
   }
@@ -19,7 +15,7 @@ export const createFavorite = async (req: Request, res: Response, next: NextFunc
   try {
     const existingFavorite = await Favorite.findOne({ userId, movieId });
     if (existingFavorite) {
-      return res.status(409).json({ error: 'The user has already added this movie to their favorites.' });
+      return res.status(409).json({ error: 'The user has already added this movie into their favorites.' });
     }
 
     const newFavorite = new Favorite({

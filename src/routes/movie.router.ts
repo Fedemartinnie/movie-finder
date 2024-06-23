@@ -1,7 +1,7 @@
 import express  from "express"
 import authorizationMiddleware from '../utils/Middleware';
 
-const moviesController = require('../controllers/Movie')
+const moviesController = require('../controllers/movie.controller')
 const router = express.Router();
 
 
