@@ -32,7 +32,7 @@ exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) 
 exports.rate = async (req: Request, res: Response) => {
     const movieId = req.params.id
     const rate = req.body.rate
-    const userId = req.body.userId
+    const userId = req.user
     try {
         const movie : movie = await moviesService.rate(rate, movieId, userId)
         if(movie){
