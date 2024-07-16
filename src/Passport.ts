@@ -7,7 +7,7 @@ import { Document } from 'mongoose';
 //! cambiar IP segun rama
 //const URI = 'http://192.168.0.73:8000' //! ip fede
 // const URI = 'http://192.168.1.6:8000'     //! ip jere
-const URI = 'http://18.188.246.231' //* AWS IP
+const URI = 'http://3.140.255.162' //* AWS IP
 
 type IUserDocument = IUser & Document; // Definir el tipo de documento de usuario
 
