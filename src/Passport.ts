@@ -2,10 +2,11 @@ import Passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User, { IUser } from './models/User'; // Importar el modelo de usuario
 import { Document } from 'mongoose';
+const generateToken = require('./middlewares/jwt.js')
 
 
 //! cambiar IP segun rama
-//const URI = 'http://192.168.0.73:8000' //! ip fede
+// const URI = 'http://192.168.0.73:8000' //! ip fede
 // const URI = 'http://192.168.1.6:8000'     //! ip jere
 const URI = 'http://3.140.255.162' //* AWS IP
 
@@ -32,12 +33,16 @@ Passport.use(new GoogleStrategy({
         email: profile.emails?.[0]?.value || '',
         profileImage: profile.photos?.[0]?.value || '',
         accessToken: accessToken,
-        refreshTokens: []
+        refreshTokens: ''
       });
-
+      
+      const refreshToken = generateToken(user)
+      console.log('REFRESH TOKENS -----> ', refreshToken)
+      user.refreshTokens = refreshToken
       await user.save(); // Guardar el nuevo usuario en la base de datos
       console.log('New user created:', user); // Mostrar el usuario creado en la consola
     } else {
+      console.log('USER ----> ', user)
       // Si el usuario ya existe, actualizar su token de acceso
       user.accessToken = accessToken;
       await user.save(); // Guardar los cambios en el usuario en la base de datos

@@ -3,6 +3,7 @@ import User, { IUser } from '../models/User';
 import { OAuth2Client } from 'google-auth-library';
 import { Profile } from 'passport';
 import { HydratedDocument } from 'mongoose';
+const generateToken = require('../middlewares/jwt.js')
 
 //* REGISTRO DE USUARIO
 export async function registerUser(userProfile: any, token: string): Promise<void> {
@@ -14,6 +15,7 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
     const email = userProfile.email || '';
     const profileImage = userProfile.photo || userProfile.profileImage || '';
     console.log('token --------> ', token)
+    console.log('USEEEEEEEER ---------> \n', userId, email)
     if (!userId || !name || !lastname || !profileImage) {
       throw new Error('Faltan campos requeridos para registrar el usuario');
     }
@@ -28,13 +30,18 @@ export async function registerUser(userProfile: any, token: string): Promise<voi
         email,
         profileImage,
         accessToken: token, // Guarda el token de acceso aquí
-        refreshTokens: []
+        refreshTokens: ''
       });
+      const refreshToken = generateToken(newUser)
+      newUser.refreshTokens = refreshToken
       await newUser.save();
       console.log('Usuario registrado:', newUser);
     } else {
       // Si el usuario ya existe, actualiza el token de acceso
-      user.accessToken = token;
+      user.accessToken = token
+      const refreshToken = generateToken(user)
+
+      user.refreshTokens = refreshToken;
       await user.save();
       console.log('Token de acceso actualizado para el usuario:', user);
     }
@@ -59,13 +66,16 @@ export const handleGoogleAuthCallback = async (accessToken: string, refreshToken
         email: profile.emails?.[0]?.value || '',
         profileImage: profile.photos?.[0]?.value || '',
         accessToken: accessToken,
-        refreshTokens: []
+        refreshTokens: ''
       });
-
+      const refreshToken = generateToken(user)
+      user.refreshTokens = refreshToken
       await user.save();
       console.log('New user created:', user);
     } else {
       user.accessToken = accessToken;
+      const refreshToken = generateToken(user)
+      user.refreshTokens = refreshToken
       await user.save();
       console.log('Existing user updated:', user);
     }

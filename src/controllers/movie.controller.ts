@@ -12,12 +12,12 @@ exports.moviesResult = async (req: Request, res: Response, _next: NextFunction) 
     const sortByRating = ( req.query.sortByRating) ?? null
     const sortByDate = (req.query.sortByDate) ?? null
     const genre = req.query.genre ?? null
-    console.log('page controller---> ', page)
-    console.log('query controller---> ', req.query)
+    // console.log('page controller---> ', page)
+    // console.log('query controller---> ', req.query)
 
     try {
         const movies: Array<MovieSummary> = await moviesService.moviesResult(page, limit, name, sortByDate, sortByRating, genre)
-        console.log('movies --> ', movies)
+        // console.log('movies --> ', movies)
         if(movies.length > 0){
             return res.status(200).json({data: movies, message: 'Succesfully movies recieved'})
         }

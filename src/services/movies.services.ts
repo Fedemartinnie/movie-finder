@@ -26,8 +26,8 @@ exports.moviesResult = async (page: number, limit: number, name: string | null, 
         ];
     }
 
-    console.log('query----> ',sortParam)
-    console.log('query----> ',query)
+    // console.log('query----> ',sortParam)
+    // console.log('query----> ',query)
 
     if (genre){
         query.genres = { $regex: new RegExp(genre, 'i') }

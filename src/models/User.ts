@@ -7,6 +7,7 @@ export interface IUser extends Document {
   lastname: string;  
   nickname: string;
   profileImage: string;
+  refreshTokens: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -16,7 +17,7 @@ const UserSchema: Schema = new Schema({
   lastname: { type: String, required: true },
   profileImage: { type: String, required: true },
   nickname: { type: String, required: false },
-  refreshTokens: { type: [String], default: [] }
+  refreshTokens: { type: String }
 });
 
 export default mongoose.model<IUser>('User', UserSchema);
